@@ -4,12 +4,15 @@
 // Loading ends after document loaded
 
 const preloader = document.querySelector("[data-preload]");
-window.addEventListener("load", function () {
+
+function preload () {
     preloader.classList.add("loaded");
     this.document.body.classList.add("loaded");
-})
+}
 
-// add event listener on multiple elements
+window.addEventListener("load", preload)
+
+// helper function: add event listener on multiple elements
 
 const addEventOnElements = function (elements, eventType, callback) {
     for (let i = 0, len = elements.length; i < len; i++) {
@@ -41,8 +44,10 @@ let lastScrollPos = 0;
 
 //hide header function
 const hideHeader = function () {
-    const isScrollBottom = lastScrollPos < window.scrollY;
-    if (isScrollBottom) {
+    //if last scroll position is smaller (higher on Y axis) than the current scroll position then user is scrolling down
+    const isScrollDown = lastScrollPos < window.scrollY;
+    //scroll down: hide navbar else scroll up: show navbar
+    if (isScrollDown) {
         header.classList.add("hide");
     } else {
         header.classList.remove("hide");
@@ -106,10 +111,11 @@ heroSliderPrevBtn.addEventListener("click", slidePrev);
 
 let autoSlideInterval;
 
+//auto switch to next slide every 6 seconds
 const autoSlide = function () {
     autoSlideInterval = setInterval(function () {
         slideNext();
-    }, 7000);
+    }, 6000);
 }
 
 addEventOnElements([heroSliderNextBtn, heroSliderPrevBtn], "mouseover", function () {
